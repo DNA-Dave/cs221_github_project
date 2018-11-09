@@ -16,4 +16,5 @@ QUERY = """
         SELECT *
         FROM `bigquery-public-data.github_repos.languages`
         """
+
 df = bq_assistant.query_to_pandas_safe(QUERY)
