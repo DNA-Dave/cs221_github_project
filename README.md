@@ -12,9 +12,9 @@ run "export GOOGLE_APPLICATION_CREDENTIALS=\"*PATH_TO_THIS_FILE*/cs221-project-1
 Then query away!
 
 Queries are basically SQL:
-QUERY = """
+QUERY = "
         SELECT *
         FROM `bigquery-public-data.github_repos.languages`
-        """
+        "
 
 df = bq_assistant.query_to_pandas_safe(QUERY)
