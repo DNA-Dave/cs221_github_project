@@ -10,3 +10,10 @@ In the common files folder, there is a file named "cs221-project-d676736fc863.js
 from bq_helper import BigQueryHelper (must have this installed first, I think pip is fine)
 run "export GOOGLE_APPLICATION_CREDENTIALS=\"*PATH_TO_THIS_FILE*/cs221-project-1b5850653193.json\"
 Then query away!
+
+Queries are basically SQL:
+QUERY = """
+        SELECT *
+        FROM `bigquery-public-data.github_repos.languages`
+        """
+df = bq_assistant.query_to_pandas_safe(QUERY)
