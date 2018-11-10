@@ -23,13 +23,11 @@ with open(str(parent_dir) + "\common_stuff\\all_project_ground_truths.txt") as i
 # Scrapes API and saves the resulting json object in the directory named "repo_names_info"
 # Each json object will be in its own file and the file name will be the name of the repo
 
-
 async def getData(all_repos_interested):
     cwd = "D:\CS221-Data"
     count = 0
-    start = 16820
-    end = float("inf")
-
+    start = 5770
+    end = 10742
     startTime = time.time()
     for name in all_repos_interested:
         count += 1
@@ -55,6 +53,5 @@ async def getData(all_repos_interested):
         await asyncio.sleep(2)
 
     print("---------------------------- Completed up to item " + str(end) + "in " + str(elapsedtime) + " seconds ------------------------------")
-
 asyncio.new_event_loop()
 asyncio.run(getData(all_repos_interested))
