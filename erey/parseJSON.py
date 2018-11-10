@@ -25,7 +25,7 @@ with open(csvFile, "r", encoding="utf-8") as readCSV:
 #Implements nesting JSON's and removing things from values
 tempFileName = commonDir + 'temp.csv' #Temp file to store result
 with open(tempFileName, "w+", encoding="utf-8") as writeIn:
-    writeIn.write(','.join(importantFeatureHeaders) + '\n') #write back in same headers as before
+    writeIn.write('\t'.join(importantFeatureHeaders) + '\n') #write back in same headers as before
 
     #### POINTS TO DIRECTORY OF JSON's. For me, it was here. Change it. 
     jsonDir = 'D:\CS221-Data\\repo_names_info\\'#DIRECTORY of JSONS
@@ -68,7 +68,4 @@ with open(tempFileName, "w+", encoding="utf-8") as writeIn:
         
         print(str(advance) + "." + f)
         advance+=1;
-
-#replace old CSV with new CSV file
-#os.system("mv "+tempFileName + " "+csvFile)
         
