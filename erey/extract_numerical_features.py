@@ -20,10 +20,13 @@ with open(csvFile, "r", encoding="utf-8") as readCSV:
     header = readCSV.readline()
     importantFeatureHeaders = header.split(",")
     importantFeatureHeaders = [w.replace("\n", "") for w in importantFeatureHeaders]
-    importantFeatureHeaders[0] = "id"
+    importantFeatureHeaders[0] = "owner.login"
 ########## This part does the rest - loops over every JSON and pulls out the imporant features as formatted by excel spreadsheet
 #Implements nesting JSON's and removing things from values
-tempFileName = commonDir + 'temp.csv' #Temp file to store result
+tempFileName = commonDir + 'tempdss.csv' #Temp file to store result
+alldata = {}
+boolean = [4,5,6,7,9]
+special = [2]
 with open(tempFileName, "w+", encoding="utf-8") as writeIn:
     writeIn.write('\t'.join(importantFeatureHeaders) + '\n') #write back in same headers as before
 
@@ -45,7 +48,12 @@ with open(tempFileName, "w+", encoding="utf-8") as writeIn:
                     cppFound = True 
                 else: counter += 1    
             if cppFound:
+                line = ""
+                feature_counter = 0
                 for header in importantFeatureHeaders:
+                    if feature_counter < 2:
+                        feature_counter += 1
+                        continue
                     ####IMPORTANT: cannot have parentheses in feature name - lemme know if it poses issues later
                     toRemove = re.search(r'\((.*)\)', header)
                     if toRemove is not None:
@@ -60,12 +68,19 @@ with open(tempFileName, "w+", encoding="utf-8") as writeIn:
                             temp = "None"
                             break
                         temp = temp[key]
+                    st = str(temp).replace(toRemove,"")
+                    if feature_counter in boolean:
+                        st = str(int(temp))
+                    elif(feature_counter in special):
+                        st = "1" if str(temp) == "User" else "0"
                     
+                    line += st + "\t"
+                    feature_counter += 1
+                alldata [str(items["owner"]["login"]) + "_" + str(items[importantFeatureHeaders[1]])] = line;
 
-                    writeIn.write(str(temp).replace(toRemove,""))
-                    writeIn.write("\t")
-        writeIn.write('\n')
-        
         print(str(advance) + "." + f)
         advance+=1;
-        
+
+    for key, value in alldata.items():
+        writeIn.write(key + "\t" + value + "\n")
+    print("done")
