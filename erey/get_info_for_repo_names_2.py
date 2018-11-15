@@ -4,6 +4,7 @@ import os
 import json
 import time
 import asyncio
+import const
 ####################################################################################################
 # This part parses all of the repo names that we have in our ground truth file (IE all the repos we are interested in
 # Repo names will be in a list called "all_repos_interested" at the end of this section of code
@@ -26,7 +27,7 @@ with open(str(parent_dir) + "\common_stuff\\all_project_ground_truths.txt") as i
 async def getData(all_repos_interested):
     cwd = "D:\CS221-Data"
     count = 0
-    start = 5770
+    start = 9690
     end = 10742
     startTime = time.time()
     for name in all_repos_interested:
@@ -42,7 +43,7 @@ async def getData(all_repos_interested):
         
         url = "https://api.github.com/search/repositories?q=" + name + "+in%3Aname&type=Repositories"
         async def req():
-            r = requests.get(url,headers={"Authorization": "token TOKEN"})
+            r = requests.get(url,headers={"Authorization": "token "+const.API_2})
             data = r.json()
             print(str(count) + "." + name)
             with open(cwd + "\\repo_names_info\\" + name.replace("/", "_") + ".json", 'w+', encoding="utf-8") as outfile:

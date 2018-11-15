@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 .vscode/settings.json
 .vscode/launch.json
+erey/const.py
