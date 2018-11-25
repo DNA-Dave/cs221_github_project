@@ -13,20 +13,20 @@ parent_dir = Path(os.getcwd())
 
 counter = 0
 all_repos_interested = list()
-with open(str(parent_dir) + "\common_stuff\\base_features.txt", 'r', encoding="utf-8") as input_file:
-    for line in input_file:
-        if counter == 0:
-            counter += 1
-            continue
-        all_repos_interested.append(line.split("\t"))
+#with open(str(parent_dir) + "\common_stuff\\base_features.txt", 'r', encoding="utf-8") as input_file:
+    # for line in input_file:
+    #     if counter == 0:
+    #         counter += 1
+    #         continue
+    #     all_repos_interested.append(line.split("\t"))
 ####################################################################################################
 # Scrapes API and saves the resulting json object in the directory named "repo_names_info"
 # Each json object will be in its own file and the file name will be the name of the repo
-
+all_repos_interested.append(line.split("\t"))
 async def getData(all_repos_interested):
     cwd = "D:\CS221-Data"
-    toRequest = [5, 6, 20, 22, 23, 24, 25]
-    folders =  ["stargazers", "subscribers", "issues", "commits", "pulls", "releases", "contributors"]
+    toRequest = [1]
+    folders =  ["users"]
     count = 0
     start = 18150
     end = float("inf")

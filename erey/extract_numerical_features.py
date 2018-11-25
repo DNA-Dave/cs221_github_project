@@ -27,8 +27,9 @@ tempFileName = commonDir + 'tempdss.csv' #Temp file to store result
 alldata = {}
 boolean = [4,5,6,7,9]
 special = [2]
+
 with open(tempFileName, "w+", encoding="utf-8") as writeIn:
-    writeIn.write('\t'.join(importantFeatureHeaders) + '\n') #write back in same headers as before
+    writeIn.write('\t'.join(importantFeatureHeaders) + '\towner_popularity\t' + 'contributor_popularity\t' + '\n') #write back in same headers as before
 
     #### POINTS TO DIRECTORY OF JSON's. For me, it was here. Change it. 
     jsonDir = 'D:\CS221-Data\\repo_names_info\\'#DIRECTORY of JSONS
@@ -76,11 +77,50 @@ with open(tempFileName, "w+", encoding="utf-8") as writeIn:
                     
                     line += st + "\t"
                     feature_counter += 1
-                alldata [str(items["owner"]["login"]) + "_" + str(items[importantFeatureHeaders[1]])] = line;
+                alldata [str(items["owner"]["login"]) + "/" + str(items[importantFeatureHeaders[1]])] = line;
 
         print(str(advance) + "." + f)
         advance+=1;
 
+    #Add Contributor Count, Contributor rating and user Rating features
+    
+    # Reads User Ratings
+    userDir = 'D:\CS221-Data\\Users\\'
+    advance = 0;
+    userRatings = {}
+    for f in os.listdir(userDir):
+        with open(userDir+f, "r", encoding="utf-8") as jsonF:
+            data = json.load(jsonF)
+            if len(data) == 0 or "message" in data:
+                continue
+            if f not in userRatings:
+                userRatings[f.replace(".json","")] = len(data)
+    
+        #Read Contributors in
+    
+    # Reads in project contributors
+    projectFollowers = {}
+    with open(commonDir + "all_contributors.txt", 'r', encoding="utf-8") as input_file:
+        for line in input_file:
+            lineSplit = line.split("\t")
+            projectFollowers[lineSplit[0]] = lineSplit[2:]
+
+    #Adds user's own follower count (User popularity)
+    for key, value in alldata.items():
+        user = key.split('/')[0]
+        userRating = str(userRatings[user]) if user in userRatings else "0"
+        alldata[key] += userRating + "\t";
+
+        #Adds total contributor popularity
+        followerVal = 0
+        key2 = key.replace("/","_")
+        if key2 in projectFollowers:
+            for follower in projectFollowers[key2]:
+                follower.replace("\n","")
+                followerVal += userRatings[follower] if follower in userRatings else 0
+
+        alldata[key] += str(followerVal) + "\t"
+            
     for key, value in alldata.items():
         writeIn.write(key + "\t" + value + "\n")
     print("done")
