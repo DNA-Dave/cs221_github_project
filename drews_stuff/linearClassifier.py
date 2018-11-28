@@ -126,4 +126,4 @@ trainingData = data[:int(len(data)*3.0/4.0)]
 print len(trainingData)
 testData = data[len(trainingData):]
 print len(testData)
-learnPredictor(trainingData, testData, 200, 0.0001)
+learnPredictor(trainingData, testData, 10000, 0.0001)
