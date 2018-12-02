@@ -56,9 +56,5 @@ for i in range(len(to_download)):
             output.write(name + "\t" + str(commits) + "\t" + str(count) + "\n")
         except urllib.error.HTTPError as e:
             print(e)
-    #file_name = name + ".html"
-    #output = open(cwd + "/all_github_pages_htmls/" + file_name.replace("/", "_"), "w+")
-    #output.write(mystr)
-    #output.close()
 output.close()
 
