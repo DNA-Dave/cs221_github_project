@@ -46,11 +46,16 @@ sc = StandardScaler()
 X_train = sc.fit_transform(X_train)
 X_test = sc.transform(X_test)
 
-clf = GradientBoostingRegressor(random_state=1234)
-#clf.fit(X_train, y_train)
-#print("Gradient Boosting Regressor score on training set: " + str(clf.score(X_train, y_train)))
-#print("Gradient Boosting Regressor score on testing set: " + str(clf.score(X_test, y_test)))
 
+clf = GradientBoostingRegressor(loss="ls", learning_rate=0.11, n_estimators=100, random_state=1234)
+clf.fit(X_train, y_train)
+#clf = GradientBoostingRegressor(learning_rate=1, max_depth=8.75, max_features=3, min_samples_leaf=0.1, min_samples_split=0.775, n_estimators=200, random_state=1234)
+#clf.fit(X_train, y_train)
+print("Gradient Boosting Regressor score on training set: " + str(clf.score(X_train, y_train)))
+print("Gradient Boosting Regressor score on testing set: " + str(clf.score(X_test, y_test)))
+
+print(clf.feature_importances_)
+'''
 from sklearn.model_selection import GridSearchCV
 
 learning_rates = [1, 0.1, 0.01]
@@ -73,3 +78,4 @@ params = {
 clf_grid = GridSearchCV(clf, param_grid=params, cv=10, n_jobs=-1, verbose=1)
 clf_grid = clf_grid.fit(X_train, y_train)
 print("Best Hyper Parameters:", clf_grid.best_params_)
+'''

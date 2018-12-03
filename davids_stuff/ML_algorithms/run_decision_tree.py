@@ -48,6 +48,8 @@ clf = tree.DecisionTreeRegressor(criterion='mae', max_features='sqrt', min_sampl
 clf.fit(X_train, y_train)
 print("Decision Tree Regressor score on training set: " + str(clf.score(X_train, y_train)))
 print("Decision Tree Regressor score on testing set: " + str(clf.score(X_test, y_test)))
+
+print(clf.feature_importances_)
 '''
 from sklearn.model_selection import GridSearchCV
 
