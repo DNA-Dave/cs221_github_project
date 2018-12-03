@@ -15,7 +15,6 @@ def dotProduct(d1, d2):
     else:
         return sum(d1.get(f, 0) * v for f, v in d2.items())
 
-
 def increment(d1, scale, d2):
     """
     Implements d1 += scale * d2 for sparse vectors.
@@ -25,7 +24,6 @@ def increment(d1, scale, d2):
     """
     for f, v in d2.items():
         d1[f] = d1.get(f, 0) + v * scale
-
 
 def evaluatePredictor(examples, predictor):
     '''
@@ -49,8 +47,27 @@ def evaluatePredictor(examples, predictor):
             print fileToScore[i][1], fileToScore[i][0]
     return error
 
+def evaluatePredictorRSquared(examples, predictor):
+    # u = (ytrue - ypred)**2 (pred)
+    # v = (ytrue - ypredMean)**2(pred)
+    
+    yTrueMean = 0
+    for i in range(len(examples)):
+        name, x, y = examples[i]
+        yTrueMean += y
+    yTrueMean /= len(examples)
 
-def learnPredictor(trainExamples, testExamples, numIters, eta):
+    u = 0
+    v = 0
+    for i in range(len(examples)):
+        name, x, y = examples[i]
+        yPred = predictor(x)
+        u += (yPred - y)**2
+        v += (y - yTrueMean)**2
+    
+    return 1 - u/v
+
+def beginWeightEvaluation(trainExamples, testExamples):
     '''
     Given |trainExamples| and |testExamples| (each one is a list of (x,y)
     pairs where x is a list of features), and the number of iterations to
@@ -63,36 +80,20 @@ def learnPredictor(trainExamples, testExamples, numIters, eta):
     You should call evaluatePredictor() on both trainExamples and testExamples
     to see how you're doing as you learn after each iteration.
     '''
-    weights = collections.defaultdict(float)  # feature => weight
-    for i in range(numIters):
-        print(i)
-        for trainingData in trainExamples:
-            #trainingData = trainExamples[i % len (trainExamples)]
-            phiX = trainingData[1]
-            score = dotProduct(phiX, weights)
-            #print score
-            y = trainingData[2]
-            #print y
-            if score < y:
-                lossGrad = 1
-            else:
-                lossGrad = -1
-            # lossGrad = -2*(score - y)#squared loss...
-            #print lossGrad
-            increment(weights, eta*lossGrad/(i+1), phiX)
-            # raw_input()
-        print weights
-    print "Train Error " + \
-        str(evaluatePredictor(trainExamples, lambda(x): dotProduct(x, weights)))
-    print "Test Error " + \
-        str(evaluatePredictor(testExamples, lambda(x): dotProduct(x, weights)))
-    print weights
-    # END_YOUR_CODE
 
-    with open(str(os.getcwd()) + "//results.json", 'w+') as output_file:
-        json.dump(weights, output_file, ensure_ascii=False)
+    weights = {} # feature => weight
+
+    with open(str(os.getcwd()) + "//results_basic_classifier.json", 'r') as weight_file:
+        weights = json.load(weight_file)
+
+    print ("Train Error ")
+    print (str(evaluatePredictor(trainExamples, lambda(x): dotProduct(x, weights))))
+    print ("RSquared " + str(evaluatePredictorRSquared(trainExamples, lambda(x): dotProduct(x, weights))))
+    print ("Test Error ")
+    print (str(evaluatePredictor(testExamples, lambda(x): dotProduct(x, weights))))
+    print ("RSquared " + str(evaluatePredictorRSquared(testExamples, lambda(x): dotProduct(x, weights))))
+
     return weights
-
 
 def getDataFrom(featuresFile, truthFile):
     # you'll need to change this to let it read the CSV and get the features of each project in this function
@@ -119,11 +120,10 @@ def getDataFrom(featuresFile, truthFile):
             result.append((repo, nameToFeatures[repo], nameToTruth[repo]))
     return result
 
-
 data = getDataFrom(
     "featurized-repos_v1DW.txt", "common_stuff/all_project_ground_truths.txt")
 trainingData = data[:int(len(data)*3.0/4.0)]
 print len(trainingData)
 testData = data[len(trainingData):]
 print len(testData)
-learnPredictor(trainingData, testData, 10000, 0.001)
+beginWeightEvaluation(trainingData, testData)

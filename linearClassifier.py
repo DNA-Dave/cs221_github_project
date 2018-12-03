@@ -84,9 +84,9 @@ def getDataFrom(featuresFile, truthFile):
     return result
 
 
-data = getDataFrom("tempdss.txt", "common_stuff/all_project_ground_truths.txt")
+data = getDataFrom("featurized-repos-v1DW.txt", "common_stuff/all_project_ground_truths.txt")
 trainingData = data[:int(len(data)*3.0/4.0)]
 print len(trainingData)
 testData = data[len(trainingData):]
 print len(testData)
-learnPredictor(trainingData, testData, 10000, 0.001 )
+learnPredictor(trainingData, testData, 100000, 0.001 )
