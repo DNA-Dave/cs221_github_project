@@ -34,7 +34,7 @@ with open(tempFileName, "w+", encoding="utf-8") as writeIn:
     #### POINTS TO DIRECTORY OF JSON's. For me, it was here. Change it. 
     jsonDir = 'D:\CS221-Data\\repo_names_info\\'#DIRECTORY of JSONS
     ##################### CHANGE LINE ABOVE ################
-    advance = 0;
+    advance = 0
     for f in os.listdir(jsonDir):#loop every JSON
         with open(jsonDir+f, "r", encoding="utf-8") as jsonF:
             data = json.load(jsonF)
@@ -80,13 +80,13 @@ with open(tempFileName, "w+", encoding="utf-8") as writeIn:
                 alldata [str(items["owner"]["login"]) + "/" + str(items[importantFeatureHeaders[1]])] = line;
 
         print(str(advance) + "." + f)
-        advance+=1;
+        advance+=1
 
     #Add Contributor Count, Contributor rating and user Rating features
     
     # Reads User Ratings
     userDir = 'D:\CS221-Data\\Users\\'
-    advance = 0;
+    advance = 0
     userRatings = {}
     for f in os.listdir(userDir):
         with open(userDir+f, "r", encoding="utf-8") as jsonF:

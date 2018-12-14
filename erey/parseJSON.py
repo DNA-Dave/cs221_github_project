@@ -6,7 +6,7 @@ import re
 #why I called os.getcwd
 commonDir = str(os.getcwd()) + "\\"
 #I put the CVS file in the common_stuff directory
-csvFile = commonDir + 'erey\\numerical_feature_extraction.csv'
+csvFile = commonDir + 'erey\\feature-extractor_for_david.csv'
 
 
 importantFeatureHeaders = []
@@ -20,10 +20,10 @@ with open(csvFile, "r", encoding="utf-8") as readCSV:
     header = readCSV.readline()
     importantFeatureHeaders = header.split(",")
     importantFeatureHeaders = [w.replace("\n", "") for w in importantFeatureHeaders]
-    importantFeatureHeaders[0] = "id"
+    importantFeatureHeaders[0] = "owner.login"
 ########## This part does the rest - loops over every JSON and pulls out the imporant features as formatted by excel spreadsheet
 #Implements nesting JSON's and removing things from values
-tempFileName = commonDir + 'temp.csv' #Temp file to store result
+tempFileName = commonDir + 'davids_features.txt' #Temp file to store result
 with open(tempFileName, "w+", encoding="utf-8") as writeIn:
     writeIn.write('\t'.join(importantFeatureHeaders) + '\n') #write back in same headers as before
 
